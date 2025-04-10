@@ -1,0 +1,10 @@
+{
+  "servers": {
+    "mcp-server-name": {
+      "type": "http-sse",
+      "command": "node",
+      "args": ["build/index.js"],
+      "port": 3001
+    }
+  }
+}

@@ -73,27 +73,46 @@ const app = (0, express_1.default)();
 // sessionId to transport
 const transports = {};
 // SSE endpoint
-app.get("/sse", (_, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const transport = new sse_js_1.SSEServerTransport('/messages', res);
-    transports[transport.sessionId] = transport;
-    res.on("close", () => {
-        delete transports[transport.sessionId];
-    });
-    yield server.connect(transport);
+app.get("/sse", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const transport = new sse_js_1.SSEServerTransport("/messages", res);
+        transports[transport.sessionId] = transport;
+        res.on("close", () => {
+            delete transports[transport.sessionId];
+        });
+        yield server.connect(transport);
+    }
+    catch (error) {
+        if (!res.headersSent) {
+            res.status(500).send("SSE connection error");
+        }
+        console.error("Error in /sse route:", error);
+    }
 }));
 // Message handling endpoint
-app.post("/messages", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const sessionId = req.query.sessionId;
-    const transport = transports[sessionId];
-    if (transport) {
-        yield transport.handlePostMessage(req, res);
-    }
-    else {
-        res.status(400).send('No transport found for sessionId');
-    }
-}));
+app.post("/messages", (req, res) => {
+    ((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        const sessionId = req.query.sessionId;
+        const transport = transports[sessionId];
+        if (!transport) {
+            return res.status(400).send("No transport found for sessionId or SSE connection not established");
+        }
+        try {
+            yield transport.handlePostMessage(req, res);
+        }
+        catch (error) {
+            if (!res.headersSent) {
+                res.status(500).send("Internal Server Error");
+            }
+        }
+    }))(req, res);
+});
+// Add a route to handle GET / requests
+app.get("/", (req, res) => {
+    res.send("Welcome to the MCP server!");
+});
 // Start the Express server
-app.listen(3001);
+app.listen(3002);
 // Wrap the top-level await in an async IIFE
 (() => __awaiter(void 0, void 0, void 0, function* () {
     const transport = new stdio_js_1.StdioServerTransport();

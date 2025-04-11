@@ -57,6 +57,51 @@ server.prompt("review-code", { code: zod_1.z.string() }, ({ code }) => ({
             }
         }]
 }));
+// Re-enabling the custom agent with placeholder string output for now
+server.tool("create-unique-culture", {
+    race1: zod_1.z.string(),
+    culture1: zod_1.z.string(),
+    language1: zod_1.z.string(),
+    race2: zod_1.z.string(),
+    culture2: zod_1.z.string(),
+    language2: zod_1.z.string(),
+    race3: zod_1.z.string(),
+    culture3: zod_1.z.string(),
+    language3: zod_1.z.string()
+}, (_a) => __awaiter(void 0, [_a], void 0, function* ({ race1, culture1, language1, race2, culture2, language2, race3, culture3, language3 }) {
+    // Placeholder response for testing
+    const uniqueDescription = `Generated a unique culture combining: \n` +
+        `1. Race: ${race1}, Culture: ${culture1}, Language: ${language1}\n` +
+        `2. Race: ${race2}, Culture: ${culture2}, Language: ${language2}\n` +
+        `3. Race: ${race3}, Culture: ${culture3}, Language: ${language3}`;
+    /*
+    const prompt = `Combine the following details into a single unique race, culture, and language:\n\n` +
+      `1. Race: ${race1}, Culture: ${culture1}, Language: ${language1}\n` +
+      `2. Race: ${race2}, Culture: ${culture2}, Language: ${language2}\n` +
+      `3. Race: ${race3}, Culture: ${culture3}, Language: ${language3}\n\n` +
+      `Describe the unique combination in detail.`;
+
+    // Use an LLM to process the input and generate a unique result
+    const response = await fetch("https://api.openai.com/v1/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer YOUR_API_KEY` // Replace with your actual API key
+      },
+      body: JSON.stringify({
+        model: "text-davinci-003",
+        prompt,
+        max_tokens: 500
+      })
+    });
+
+    const data = await response.json();
+    const uniqueDescription = data.choices[0]?.text?.trim() || "Unable to generate a unique description.";
+    */
+    return {
+        content: [{ type: "text", text: uniqueDescription }]
+    };
+}));
 // Add a dynamic greeting resource
 server.resource("greeting", new mcp_js_1.ResourceTemplate("greeting://{name}", { list: undefined }), (uri, variables) => __awaiter(void 0, void 0, void 0, function* () {
     const name = Array.isArray(variables.name) ? variables.name[0] : variables.name || "Guest";
@@ -118,3 +163,34 @@ app.listen(3002);
     const transport = new stdio_js_1.StdioServerTransport();
     yield server.connect(transport);
 }))();
+// Removed vscode integration as it is not applicable to this MCP server project
+// Updated error handling for unknown type
+// Function to integrate with Microsoft Copilot Studio (commented out for now)
+/*
+async function integrateCopilotStudio() {
+  try {
+    // Select a Copilot model
+    const [model] = await vscode.lm.selectChatModels({ vendor: 'copilot', family: 'gpt-4o' });
+
+    if (!model) {
+      console.error('No Copilot models available.');
+      return;
+    }
+
+    // Example: Sending a request to the selected model
+    const craftedPrompt = 'Hello, Copilot! Can you assist with MCP server tasks?';
+    const response = await model.sendRequest(craftedPrompt);
+
+    console.log('Copilot response:', response);
+  } catch (err) {
+    if (err instanceof Error) {
+      console.error('Language Model Error:', err.message);
+    } else {
+      console.error('Unexpected error:', err);
+    }
+  }
+}
+
+// Call the integration function
+// integrateCopilotStudio();
+*/

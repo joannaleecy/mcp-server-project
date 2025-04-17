@@ -12,11 +12,10 @@
 
     /* Language and Environment */
     "target": "es2022",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
-    "outDir": "./build",
-    "module": "commonjs",
-    "target": "es6",
-    "esModuleInterop": true,
-    "strict": true,
+    "outDir": "./dist",                                  /* Ensure the output directory matches the expected path */
+    "module": "commonjs",                                /* Use CommonJS module system */
+    "esModuleInterop": true,                             /* Enable compatibility with CommonJS modules */
+    "strict": true,                                      /* Enable all strict type-checking options. */
     // "lib": [],                                        /* Specify a set of bundled library declaration files that describe the target runtime environment. */
     // "jsx": "preserve",                                /* Specify what JSX code is generated. */
     // "libReplacement": true,                           /* Enable lib replacement. */
@@ -31,9 +30,9 @@
     // "moduleDetection": "auto",                        /* Control what method is used to detect module-format JS files. */
 
     /* Modules */
-    "module": "NodeNext",                                /* Specify what module code is generated. */
+    "module": "NodeNext",
+    "moduleResolution": "nodenext",                          /* Use Node.js module resolution */
     // "rootDir": "./",                                  /* Specify the root folder within your source files. */
-    "moduleResolution": "nodenext",                     /* Specify how TypeScript looks up a file from a given module specifier. */
     // "baseUrl": "./",                                  /* Specify the base directory to resolve non-relative module names. */
     // "paths": {},                                      /* Specify a set of entries that re-map imports to additional lookup locations. */
     // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */
